@@ -1,5 +1,4 @@
 # Creating Data Transformation file code
-import os   
 import sys
 import numpy as np
 import pandas as pd
@@ -10,17 +9,19 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder,StandardScaler
 
 from dataclasses import dataclass
+
 from src.exception import CustomException
 from src.logger import logging
+import os
+
 from src.utils import save_object
 
 # Create a config function
 @dataclass
-
 class DataTransformationConfig:
     preprocessor_obj_file_path = os.path.join('artifacts',"preprocessor.pkl")
 
-class DataTransforamtion:
+class DataTransformation:
     def __init__(self):
         self.data_transformer_config= DataTransformationConfig()  #initialize the data transformer config
     
@@ -47,16 +48,19 @@ class DataTransforamtion:
             )
 
             logging.info('Numerical columns Standard scaling completed')
+            logging.info(f"Numerical columns: {numerical_columns}")
 
             cat_pipeline = Pipeline(
                 steps=[
                     ('imputer', SimpleImputer(strategy="most_frequent")),
                     ('one_hot_encoder', OneHotEncoder()),
-                    ('scaler', StandardScaler())
+                    ('scaler', StandardScaler(with_mean=False))
                 ]
             )
 
             logging.info('Categorical columns encoding completed')
+            logging.info(f"Categorical columns: {categorical_columns}")
+            
 
             # Club categorical encoding and numerical scaling using ColumnTransformer    
             preprocessor = ColumnTransformer(
@@ -73,7 +77,7 @@ class DataTransforamtion:
         
 # Initiate data tranformation blog to perform actual transformation steps to read data, generate scaled/encode 
 # feature, target variable, test train datasets.
-    def initiate_data_transformation(self, train_path, test_path)
+    def initiate_data_transformation(self, train_path, test_path):
         try:
             train_df= pd.read_csv(train_path)
             test_df=pd.read_csv(test_path)
