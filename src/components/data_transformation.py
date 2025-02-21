@@ -91,13 +91,23 @@ class DataTransformation:
             target_column_name='math_score'
             numerical_columns=['writing_score', 'reading_score']
 
-            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)
+            input_feature_train_df=train_df.drop(columns=[target_column_name],axis=1)
+            target_feature_train_df=train_df[target_column_name]
 
+            input_feature_test_df=test_df.drop(columns=[target_column_name],axis=1)
+            target_feature_test_df=test_df[target_column_name]
+
+            logging.info(
+                f"Applying preprocessing object on training dataframe and testing dataframe."
+            )
+
+            # Transform the features
+            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)
             input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)
 
+            # Combine features and target variables into final arrays
             train_arr = np.c_[input_feature_train_arr, np.array(target_feature_train_df)]
-
-            test_arr = np.c-[input_feature_test_arr, np.array(target_feature_test_df)]
+            test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
 
             logging.info('Saved Preprocessing Object')
 
