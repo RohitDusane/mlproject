@@ -33,7 +33,7 @@ class DataTransformation:
             numerical_columns=["writing_score","reading_score"]   # numerical features
             categorical_columns=[
                 "gender",
-                "race_ethinicity",
+                "race_ethnicity",
                 'parental_level_of_education',
                 'lunch',
                 'test_preparation_course',
@@ -102,8 +102,8 @@ class DataTransformation:
             )
 
             # Transform the features
-            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)
-            input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)
+            input_feature_train_arr=preprocessing_obj.fit_transform(input_feature_train_df)
+            input_feature_test_arr=preprocessing_obj.transform(input_feature_test_df)
 
             # Combine features and target variables into final arrays
             train_arr = np.c_[input_feature_train_arr, np.array(target_feature_train_df)]
@@ -112,14 +112,16 @@ class DataTransformation:
             logging.info('Saved Preprocessing Object')
 
             save_object(
-                file_path = self.data_transformation_config.preprocessor_obj_file_path,
-                obj= preprocessing_obj
-            )
-            return(
-                train_arr,
-                test_arr,
-                self.data_transformation_config.preprocessor_obj_file_path,    
+
+                file_path=self.data_transformer_config.preprocessor_obj_file_path,
+                obj=preprocessing_obj
+
             )
 
+            return (
+                train_arr,
+                test_arr,
+                self.data_transformer_config.preprocessor_obj_file_path,
+            )
         except Exception as e:
             raise CustomException(e,sys)
